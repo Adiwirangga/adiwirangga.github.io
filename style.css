@@ -196,4 +196,10 @@ header h1 span:first-child, header h1 span:last-child { color: #fff; }
     .grid-wrapper { grid-template-columns: 1fr; gap: 15px; }
     .full-width { grid-column: span 1; height: 100px; }
     .version-tag { display: none; }
+    .card {
+        backdrop-filter: none !important; /* Nonaktifkan blur di mobile */
+        background-color: #111 !important; /* Warna latar belakang solid */
+        opacity: 1 !important; /* Pastikan opasitas penuh */
+        height: auto; min-height: 150px;
+    }
 }
