@@ -73,17 +73,16 @@ header h1 span:first-child, header h1 span:last-child { color: #fff; }
 
 /* Kartu CV (Hubungi & CV) -> Kotak Kecil */
 .card.span-1 {
-    width: 130px;        /* Lebar Kunci 130px */
-    height: 130px;       /* Tinggi Kunci 130px */
-    flex-shrink: 0;      /* Jangan mau diperkecil browser */
+    width: 130px !important;    /* Gunakan !important untuk memaksa jika perlu */
+    height: 130px !important;
+    flex-shrink: 0;
     position: relative;
 }
 
-/* Kartu Hubungi Saya -> Isi Sisa Ruang */
 .card.span-3 {
-    /* Rumus: 100% Lebar - Lebar CV (130) - Gap (20) */
-    width: calc(100% - 130px - 20px); 
-    height: 130px;
+    /* Menghitung: Total Lebar - Lebar CV (130px) - Gap (20px) */
+    width: calc(100% - 130px - 20px) !important; 
+    height: 130px !important;
     position: relative;
 }
 
@@ -321,4 +320,5 @@ header h1 span:first-child, header h1 span:last-child { color: #fff; }
     background: transparent !important;
     box-shadow: none !important;
     transition: none !important;
+
 }
