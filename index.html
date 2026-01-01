@@ -30,8 +30,9 @@
 
         <div class="grid-wrapper">
     
-    <div class="card" onclick="toggleCard(this)">
+    <div class="card span-2" onclick="toggleCard(this)">
         <h3>Tentang Saya</h3>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
         
         <div class="card-content short-text">
             <p>Saya adalah mahasiswa IT yang suka dengan dunia desain.</p>
@@ -44,19 +45,22 @@
         </div>
     </div>
 
-    <div class="card" onclick="toggleCard(this)">
+    <div class="card span-2" onclick="toggleCard(this)">
         <h3>Proyek</h3>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-icon"></i>
         
         <div class="card-content short-text">
             <p>Beberapa proyek yang telah aku kerjakan. Ayo cek!</p>
         </div>
 
         <div class="card-details">
-            <p>Sayangnya sampai sekarang belum ada proyek yang telah aku selesaikan selain portofolio ini.</p>
+            <p><strong>1. Nasi Satset & Holy Water</strong><br>Proyek kewirausahaan kampus (Branding & Marketing).</p>
+            <br>
+            <p><strong>2. Sticker Pack Design</strong><br>Desain karakter Chibi untuk merchandise.</p>
         </div>
     </div>
 
-    <div class="card full-width">
+    <div class="card span-3">
         <h3>Hubungi Saya</h3>
         
         <div class="social-icons">
@@ -74,38 +78,80 @@
         </div>
     </div>
 
+    <a href="CV of Faldian.pdf" target="_blank" style="text-decoration: none; color: inherit; display: contents;">
+        <div class="card span-1">
+            <h3>CV</h3>
+            <i class="fa-solid fa-arrow-down download-icon"></i>
+        </div>
+    </a>
+
 </div>
 
     <div class="overlay" id="overlay" onclick="closeAllCards()"></div>
 
     <script>
-        function toggleCard(element) {
-            // Cek apakah kartu ini sedang expand?
-            const isExpanded = element.classList.contains('expanded');
-            
-            // Tutup semua kartu dulu biar gak tumpuk-tumpuk
-            closeAllCards();
+    // Variabel global untuk menyimpan referensi placeholder aktif
+    let activePlaceholder = null;
 
-            // Jika tadi belum expand, maka sekarang Expand dia!
-            if (!isExpanded) {
-                element.classList.add('expanded');
-                document.getElementById('overlay').classList.add('active');
+    function toggleCard(element) {
+        const isExpanded = element.classList.contains('expanded');
+        
+        if (!isExpanded) {
+            closeAllCards(); 
+            
+            // 1. [BARU] BUAT PLACEHOLDER (BAYANGAN)
+            // Kita buat elemen div baru
+            activePlaceholder = document.createElement('div');
+            
+            // Kita copy semua kelas dari kartu asli (misal: 'card span-2')
+            // agar ukurannya sama persis di dalam grid
+            activePlaceholder.className = element.className;
+            
+            // Tambahkan kelas khusus agar transparan
+            activePlaceholder.classList.add('placeholder-card');
+            
+            // Sisipkan bayangan ini tepat SEBELUM kartu asli di HTML
+            element.parentNode.insertBefore(activePlaceholder, element);
+
+            // 2. Expand Kartu Asli
+            element.classList.add('expanded');
+            document.getElementById('overlay').classList.add('active');
+        } else {
+            closeOneCard(element);
+        }
+    }
+
+    function closeOneCard(card) {
+        // Matikan transisi
+        card.style.transition = 'none';
+        void card.offsetWidth; // Force reflow
+
+        card.classList.add('closing');
+        document.getElementById('overlay').classList.remove('active');
+
+        setTimeout(() => {
+            card.classList.remove('expanded', 'closing');
+            card.style.transition = ''; 
+
+            // 3. [BARU] HAPUS PLACEHOLDER
+            // Setelah kartu asli kembali ke tempatnya, bayangan dibuang
+            if (activePlaceholder) {
+                activePlaceholder.remove();
+                activePlaceholder = null;
             }
-        }
+        }, 380); 
+    }
 
-        function closeAllCards() {
-            // Cari semua kartu yang punya kelas 'expanded'
-            const expandedCards = document.querySelectorAll('.card.expanded');
-            
-            // Hapus kelas 'expanded' dari mereka
-            expandedCards.forEach(card => {
-                card.classList.remove('expanded');
-            });
-
-            // Sembunyikan latar gelap
-            document.getElementById('overlay').classList.remove('active');
-        }
-    </script>
+    function closeAllCards() {
+        const expandedCards = document.querySelectorAll('.card.expanded');
+        expandedCards.forEach(card => {
+            closeOneCard(card);
+        });
+    }
+    
+    document.getElementById('overlay').addEventListener('click', closeAllCards);
+</script>
+    </div>
 
 </body>
 </html>
